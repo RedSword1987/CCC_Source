@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- datasource default config-->
+<database-source>
+	<connectSizeMax>30</connectSizeMax>
+	<connectSizeMin>4</connectSizeMin>
+	<connectSizeIncreament>5</connectSizeIncreament>
+	<connectSizeAvailable>4</connectSizeAvailable>
+	<!-- Millis time,not second -->
+	<connectFreeTimeMax>180000</connectFreeTimeMax>
+	<!-- Millis time,not second -->
+	<connectActiveTimeMax>180000</connectActiveTimeMax>
+	<poolDriverClass>org.logicalcobwebs.proxool.ProxoolDriver</poolDriverClass>
+	<testSql></testSql>
+	<constantMap showSql="false" logName=""/>
+</database-source>

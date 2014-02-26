@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd" version="2.0">
+	<description>CCW function</description>
+	<display-name>CCW functions</display-name>
+	<tlib-version>1.0</tlib-version>
+	<short-name>ccc_fn</short-name>
+	<uri>http://www.ccc.com/functions</uri>
+
+
+	<function>
+		<description>date_convertLongToString</description>
+		<name>date_convertLongToString</name>
+		<function-class>com.ccc.dreamtag.tag.function.TagUtil</function-class>
+		<function-signature>java.lang.String date_convertLongToString(java.lang.String,java.lang.String)</function-signature>
+		<example>Product name: ${ccc_fn.date_convertLongToString(java.lang.String,java.lang.String)}</example>
+	</function>
+
+
+	<function>
+		<description>date_getTimeString_Now</description>
+		<name>date_getTimeString_Now</name>
+		<function-class>com.ccc.dreamtag.tag.function.TagUtil</function-class>
+		<function-signature>java.lang.String date_getTimeString_Now(java.lang.String)</function-signature>
+		<example>Product name: ${ccc_fn.date_getTimeString_Now(java.lang.String)}</example>
+	</function>
+</taglib>

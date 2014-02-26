@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="buildjar" default="run" basedir=".">
+	<!--定义生成的时间-->
+	<tstamp prefix="my">
+		<format property="pre" pattern="1.0" />
+	</tstamp>
+	<!--源码路径-->
+	<property name="src" value="src" />
+	<!--源码路径-->
+	<property name="src.dir" value="src" />
+	<!--源码配置文件路径-->
+	<property name="srcConfig" value="src/com/ccc/config" />
+	<!--临时文件夹-->
+	<property name="dest" value="tempClasses" />
+	<!--临时文件夹配置文件夹-->
+	<property name="destConfigmeta-inf" value="tempClasses/META-INF" />
+	<!--临时文件夹配置文件夹-->
+	<property name="destConfig" value="tempClasses/com/ccc/config" />
+	<!--临时文件夹-->
+	<!--编译说需要的lib路径-->
+	<property name="lib.home" value="lib" />
+	<!--生成的jar文件的名称-->
+	<property name="jarName" value="build/CCC_${my.pre}.jar" />
+	<!--生成的jar文件的名称-->
+	<property name="doc.dir" value="build/doc" />
+
+	<path id="compile.classpath">
+		<pathelement location="${lib.home}" />
+		<fileset dir="${lib.home}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+	<!--开始编译-->
+	<target name="run" depends="createTagFile,init,compile,build,clean" />
+	<!--生成临时文件夹-->
+	<target name="createTagFile">
+		<java classname="antClass.Ant_createTag" fork="true" failonerror="true">
+			<classpath path="bin/"/>
+			<classpath refid="compile.classpath"/>
+		</java>
+	</target>
+
+	<target name="init">
+		<mkdir dir="${dest}" />
+		<mkdir dir="${destConfig}" />
+		<mkdir dir="${destConfigmeta-inf}" />
+	</target>
+	<!--编译java到class文件-->
+	<target name="compile">
+		<javac srcdir="${src}" destdir="${dest}" classpath="${libPath}" encoding="utf-8" includes="**">
+			<classpath refid="compile.classpath" />
+		</javac>
+		<copy todir="${destConfig}/">
+			<fileset dir="${srcConfig}/">
+				<include name="*.xml" />
+			</fileset>
+		</copy>
+		<copy todir="${destConfigmeta-inf}/">
+			<fileset dir="META-INF/">
+				<include name="ccc_fn.tld" />
+			</fileset>
+		</copy>
+
+	</target>
+	<!--将class文件打包-->
+	<target name="build">
+		<jar jarfile="${jarName}" basedir="${dest}" />
+	</target>
+	<!--清理临时文件夹-->
+	<target name="clean">
+		<delete dir="${dest}/" />
+	</target>
+	<!-- 输出api文档 -->
+	<target name="createJavadoc">
+		<delete dir="${doc.dir}" />
+		<mkdir dir="${doc.dir}" />
+		<javadoc destdir="${doc.dir}" author="true" version="true" use="yes" windowtitle="Code Generator API" encoding="utf-8" charset="utf-8" linksource="no" splitindex="yes">
+			<packageset dir="${src.dir}" defaultexcludes="yes" />
+			<doctitle>
+				<![CDATA[<h1>QM Code Generator API</h1>]]>
+	</doctitle>
+		<bottom>
+			<![CDATA[<i>Document by Wang Xun 2010.</i>]]>
+	</bottom>
+	<classpath>
+		<fileset dir="${lib.home}">
+			<include name="*.jar" />
+		</fileset>
+	</classpath>
+</javadoc>
+</target>
+</project>
