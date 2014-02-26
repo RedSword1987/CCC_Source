@@ -9,6 +9,7 @@ import java.util.Map;
  * @date 2013-05-19 11:10:02
  */
 public class CollectionUtil {
+	
 
     /**
      * cut off a list by size<br/> size>=1
