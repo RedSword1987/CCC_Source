@@ -19,7 +19,7 @@ public class DefaultDataSourceConfig {
 	public final Map<String, String> configMap = getConfigMap();
 	
 	public Map<String, String> getConfigMap() {
-		InputStream in = this.getClass().getResourceAsStream("/com/jhplatform/config/DefaultDataBaseConfig.xml");
+		InputStream in = this.getClass().getResourceAsStream("/com/ccc/config/DefaultDataBaseConfig.xml");
 		Map<String, String> returnMap = new HashMap<String, String>();
 		try {
 			Document doc = FileXmlUtil.getDocument(in);
