@@ -2,6 +2,9 @@ package com.ccc.thread;
 
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.Map.Entry;
+
+import com.ccc.dreamlog.LogDream;
 
 /**
  * @author RedSword
@@ -10,9 +13,12 @@ import java.util.Map;
  */
 
 public abstract class DreamRunner implements Runnable {
-    protected Map<String, Object> paramMap = new Hashtable<String, Object>();
+	protected Map<String, Object> paramMap = new Hashtable<String, Object>();
 
-    public DreamRunner(Map<String, Object> paramMap) {
-        this.paramMap = paramMap;
-    }
+	public DreamRunner(Map<String, Object> paramMap) {
+		this.paramMap = paramMap;
+		for (Entry<String, Object> en : this.paramMap.entrySet()) {
+			LogDream.info(en.getKey() + "#" + en.getValue() + "#");
+		}
+	}
 }

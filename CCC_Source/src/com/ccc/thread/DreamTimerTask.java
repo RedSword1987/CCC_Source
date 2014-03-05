@@ -2,8 +2,8 @@ package com.ccc.thread;
 
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.TimerTask;
 import java.util.Map.Entry;
+import java.util.TimerTask;
 
 import com.ccc.dreamlog.LogDream;
 
@@ -14,13 +14,12 @@ import com.ccc.dreamlog.LogDream;
  */
 
 public abstract class DreamTimerTask extends TimerTask {
-    protected Map<String, Object> paramMap = new Hashtable<String, Object>();
+	protected Map<String, Object> paramMap = new Hashtable<String, Object>();
 
-    public DreamTimerTask(Map<String, Object> paramMap) {
-        this.paramMap = paramMap;
-        LogDream.info(paramMap.get("Describe") + "  run...");
-        for (Entry<String, Object> en : this.paramMap.entrySet()) {
-            LogDream.info(en.getKey() + "#" + en.getValue() + "#");
-        }
-    }
+	public DreamTimerTask(Map<String, Object> paramMap) {
+		this.paramMap = paramMap;
+		for (Entry<String, Object> en : this.paramMap.entrySet()) {
+			LogDream.info(en.getKey() + "#" + en.getValue() + "#");
+		}
+	}
 }
