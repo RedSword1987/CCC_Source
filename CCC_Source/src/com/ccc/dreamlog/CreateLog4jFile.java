@@ -1,4 +1,4 @@
-package com.ccc.log4j.extend;
+package com.ccc.dreamlog;
 
 import java.io.File;
 import java.util.List;
