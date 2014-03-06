@@ -2,7 +2,7 @@
 <project name="buildjar" default="run" basedir=".">
 	<!--定义生成的时间-->
 	<tstamp prefix="my">
-		<format property="pre" pattern="1.0.0" />
+		<format property="pre" pattern="1.0.0_withSource" />
 	</tstamp>
 	<!--源码路径-->
 	<property name="src" value="src" />
