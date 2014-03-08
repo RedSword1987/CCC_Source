@@ -52,8 +52,13 @@ public class LogDream {
 
 	private static String getClassPath(String str) {
 		try {
-			String s = str.substring(str.indexOf(")") + 1);
-			s = s.substring(s.indexOf("at") + 3, s.indexOf(")") + 1) + ":";
+			String s = str;
+			int insex = s.indexOf(LogDream.class.getSimpleName() + ".java");
+			if (insex != -1) {
+				s = s.substring(insex + 18);
+			}
+			int end = s.indexOf(41);
+			s = s.substring(0, end + 1);
 			return s;
 		} catch (Exception e) {
 			return null;
