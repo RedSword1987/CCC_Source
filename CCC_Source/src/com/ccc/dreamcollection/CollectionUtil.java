@@ -52,7 +52,7 @@ public class CollectionUtil {
 			int start = 0;
 			int max = 0;
 			while (allL-- > 0) {
-				max = start + size > length ? length : start + length;
+				max = start + size > length ? length : start + size;
 				IntervalBean intervalbean = new IntervalBean();
 				intervalbean.first = start;
 				intervalbean.last = max;
@@ -70,11 +70,11 @@ public class CollectionUtil {
 	 * @param sign
 	 * @return
 	 */
-	public static Map<String, List<?>> sortMapByValueSize(Map<String, List<?>> paramMap, String sign) {
-		Map<String, List<?>> allMap_ = new LinkedHashMap<String, List<?>>();
+	public static Map<String, List> sortMapByValueSize(Map<String, List> paramMap, String sign) {
+		Map<String, List> allMap_ = new LinkedHashMap<String, List>();
 		List<CompareBean> list = new ArrayList<CompareBean>();
 
-		for (Entry<String, List<?>> en : paramMap.entrySet()) {
+		for (Entry<String, List> en : paramMap.entrySet()) {
 			list.add(new CompareBean(en.getKey(), Long.valueOf(en.getValue().size())));
 		}
 
