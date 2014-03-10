@@ -20,7 +20,9 @@ public class DBJdbcImpl extends ImplAbstract {
 		databaseDefine.setDriverUrl(databaseconfig.getDriverUrl());
 		databaseDefine.setUser(databaseconfig.getUser());
 		databaseDefine.setPassword(databaseconfig.getPassword());
+		databaseDefine.setShowSql(databaseconfig.isShowSql());
 		this.databaseDefine = databaseDefine;
+		this.showSql = databaseconfig.isShowSql();
 	}
 
 	@Override
