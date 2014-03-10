@@ -2,7 +2,7 @@
 <project name="buildjar" default="run" basedir=".">
 	<!--定义生成的时间-->
 	<tstamp prefix="my">
-		<format property="pre" pattern="1.0.0_withSource" />
+		<format property="pre" pattern="1.0.0" />
 	</tstamp>
 	<!--源码路径-->
 	<property name="src" value="src" />
@@ -20,7 +20,7 @@
 	<!--编译说需要的lib路径-->
 	<property name="lib.home" value="lib" />
 	<!--生成的jar文件的名称-->
-	<property name="jarName" value="build/CCC_${my.pre}.jar" />
+	<property name="jarName" value="build/CCC_${my.pre}_withSource.jar" />
 	<!--生成的jar文件的名称-->
 	<property name="doc.dir" value="build/doc" />
 
