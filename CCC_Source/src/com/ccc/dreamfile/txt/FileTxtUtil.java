@@ -3,9 +3,11 @@ package com.ccc.dreamfile.txt;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,35 +21,48 @@ import com.ccc.dreamtag.tag.function.StringUtil;
  */
 
 public class FileTxtUtil {
+
+	/**
+	 * @param filePath
+	 * @return
+	 */
+	public static String convertString(File file) {
+		List<String> re = convertListString(file);
+		StringBuilder sbBuilder=new StringBuilder();
+		if (re.size()!=0) {
+			for (String string : re) {
+				sbBuilder.append(" ").append(string);
+			}
+		}
+		
+		return sbBuilder.toString();
+	}
+
     /**
      * @param filePath
      * @return
      */
     public static List<String> convertListString(File file) {
-        List<String> returnList = new ArrayList<String>();
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new FileReader(file));
-            String r = br.readLine();
-            while (r != null) {
-                if (!StringUtil.isEmpty(r)) {
-                    returnList.add(r);
-                }
-                r = br.readLine();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return returnList;
+		List<String> lines = new ArrayList<String>();
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new InputStreamReader(new FileInputStream(file.getAbsolutePath()), "UTF-8"));
+			String line = null;
+			while ((line = br.readLine()) != null) {
+				lines.add(line);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return lines;
     }
 
     /**

@@ -224,6 +224,21 @@ public class StringUtil {
 		return buf.toString();
 	}
 
+	public static String joinObjectAll(Object[] array, String separator) {
+		if (array == null)
+			return "";
+		if (separator == null)
+			separator = "";
+
+		StringBuffer buf = new StringBuffer();
+		for (int i = 0; i < array.length; i++) {
+			buf.append(array[i]);
+			if (i < array.length - 1)
+				buf.append(separator);
+		}
+		return buf.toString();
+	}
+
 	public static List<String> cutOff(String content, int length) {
 		List<String> lists = new ArrayList<String>();
 		content = trim(content);
@@ -290,8 +305,10 @@ public class StringUtil {
 		StringBuilder sBuilder = new StringBuilder();
 		if (param != null && param.size() != 0) {
 			for (Map<String, Object> map : param) {
-
-				sBuilder.append(separator).append(map.get(fieldName));
+				String value = String.valueOf(map.get(fieldName));
+				if (!isEmpty(value)) {
+					sBuilder.append(separator).append(map.get(fieldName));
+				}
 			}
 			if (separator.length() != 0) {
 				sBuilder.delete(0, separator.length());

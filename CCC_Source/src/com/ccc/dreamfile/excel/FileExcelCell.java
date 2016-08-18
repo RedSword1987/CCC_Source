@@ -10,7 +10,17 @@ public class FileExcelCell {
     //1:String 2:int
     private int contentType = 1;
 
-    public FileExcelCell(Object content) {
+	private Short color = null;
+
+	public Short getColor() {
+		return this.color;
+	}
+
+	public void setColor(Short color) {
+		this.color = color;
+	}
+
+	public FileExcelCell(Object content) {
         this.content = content;
     }
     public FileExcelCell(Object content,int contentType) {

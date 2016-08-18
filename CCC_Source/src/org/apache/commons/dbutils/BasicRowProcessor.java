@@ -156,7 +156,7 @@ public class BasicRowProcessor implements RowProcessor {
         int cols = rsmd.getColumnCount();
 
         for (int i = 1; i <= cols; i++) {
-            result.put(rsmd.getColumnName(i).toUpperCase(), rs.getObject(i));
+			result.put(rsmd.getColumnLabel(i).toUpperCase(), rs.getObject(i));
         }
 
         return result;

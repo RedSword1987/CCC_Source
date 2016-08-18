@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 
+import com.ccc.dreamdb.db.impl.PageResultBean;
 import com.ccc.dreamdb.db.sourcedefine.DatabaseDefine;
 
 /**
@@ -53,6 +54,16 @@ public interface DBJdbc {
      */
     @Deprecated
     public Map<String, Object> queryMapPage(String sql, Integer pageNo, Integer PageSize, Object... objects);
+
+	/**
+	 * @param sql
+	 * @param objects
+	 * @return <ul>
+	 *         <li>put("ALLCOUNT","all count")</li>
+	 *         <li>put("PAGELIST","List Map")</li>
+	 *         </ul>
+	 */
+	public PageResultBean queryPage(String countSql, String orderSql, Integer pageNo, Integer PageSize, Object... objects);
 
     /**
      * @param sql

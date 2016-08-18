@@ -248,7 +248,8 @@ public class ImplAbstract implements DBJdbc {
 		sBuilder.append(sql).append(")");
 		Map<String, Object> mapTemp = queryMap(sBuilder.toString(), objects);
 		sBuilder.setLength(0);
-		sBuilder.append("select * from (select *,rownum row_num from (").append(sql).append(")  where rownum<=").append(pageNo * PageSize).append(") where   row_num>=").append((pageNo - 1) * PageSize);
+		sBuilder.append("select * from (select *,rownum row_num from (").append(sql).append(")  where rownum<=").append(pageNo * PageSize).append(") where   row_num>=")
+				.append((pageNo - 1) * PageSize);
 		List<?> lists = queryListBean(sql, cls, objects);
 		map.put("ALLCOUNT", mapTemp.get("ALLCOUNT"));
 		map.put("PAGELIST", lists);
@@ -365,6 +366,7 @@ public class ImplAbstract implements DBJdbc {
 
 	@Override
 	public Map<String, Object> queryMapPage(String sql, Integer pageNo, Integer PageSize, Object... objects) {
+
 		if (this.showSql) {
 			if (objects == null || objects.length == 0) {
 				LogDream.info(sql);
@@ -380,13 +382,20 @@ public class ImplAbstract implements DBJdbc {
 			}
 		};
 		StringBuilder sBuilder = new StringBuilder("select count(*) as ALLCOUNT from (");
-		sBuilder.append(sql).append(")");
+		sBuilder.append(sql).append(") a");
 		Map<String, Object> mapTemp = queryMap(sBuilder.toString(), objects);
 		sBuilder.setLength(0);
-		sBuilder.append("select * from (select *,rownum row_num from (").append(sql).append(")  where rownum<=").append(pageNo * PageSize).append(") where   row_num>=").append((pageNo - 1) * PageSize);
-		List<Map<String, Object>> lists = queryListMap(sql, objects);
+		if (this.getDatabaseDefine().getDatabaseType() == 3) {
+			sBuilder.append("select * from (").append(sql).append(")   a limit ").append((pageNo - 1) * PageSize).append(",").append(PageSize);
+			List<Map<String, Object>> lists = queryListMap(sBuilder.toString(), objects);
+			map.put("PAGELIST", lists);
+		} else {
+			sBuilder.append("select * from (select *,rownum row_num from (").append(sql).append(")  where rownum<=").append(pageNo * PageSize).append(") where   row_num>=")
+					.append((pageNo - 1) * PageSize);
+			List<Map<String, Object>> lists = queryListMap(sBuilder.toString(), objects);
+			map.put("PAGELIST", lists);
+		}
 		map.put("ALLCOUNT", mapTemp.get("ALLCOUNT"));
-		map.put("PAGELIST", lists);
 		return map;
 	}
 
@@ -483,10 +492,135 @@ public class ImplAbstract implements DBJdbc {
 				}
 			}
 		} else if (this.databaseDefine.getDatabaseType() == 2) {
+			if (this.showSql) {
+				LogDream.info(insertSql);
+				LogDream.info(StringUtil.convertObjectsTostring(objects));
+			}
+			Connection conn = getConnection(this.databaseSource);
+			PreparedStatement prement = null;
+			try {
+				prement = conn.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
+				if (objects != null && objects.length != 0) {
+					for (int i = 0; i < objects.length; i++) {
+						prement.setObject(i + 1, objects[i]);
+					}
+				}
+				prement.executeUpdate();
+				ResultSet rs = prement.getGeneratedKeys();
+				rs.next();
+				generate = rs.getLong(1);
+				DbUtils.close(rs);
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					DbUtils.close(prement);
+					DbUtils.close(conn);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		} else if (this.databaseDefine.getDatabaseType() == 3) {
-		} else {
+			if (this.showSql) {
+				LogDream.info(insertSql);
+				LogDream.info(StringUtil.convertObjectsTostring(objects));
+			}
+			Connection conn = getConnection(this.databaseSource);
+			PreparedStatement prement = null;
+			try {
+				prement = conn.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
+				if (objects != null && objects.length != 0) {
+					for (int i = 0; i < objects.length; i++) {
+						prement.setObject(i + 1, objects[i]);
+					}
+				}
+				prement.executeUpdate();
+				ResultSet rs = prement.getGeneratedKeys();
+				rs.next();
+				generate = rs.getLong(1);
+				DbUtils.close(rs);
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					DbUtils.close(prement);
+					DbUtils.close(conn);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		} else {if (this.showSql) {
+			LogDream.info(insertSql);
+			LogDream.info(StringUtil.convertObjectsTostring(objects));
+		}
+		Connection conn = getConnection(this.databaseSource);
+		PreparedStatement prement = null;
+		try {
+			prement = conn.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);
+			if (objects != null && objects.length != 0) {
+				for (int i = 0; i < objects.length; i++) {
+					prement.setObject(i + 1, objects[i]);
+				}
+			}
+			prement.executeUpdate();
+			ResultSet rs = prement.getGeneratedKeys();
+			rs.next();
+			generate = rs.getLong(1);
+			DbUtils.close(rs);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				DbUtils.close(prement);
+				DbUtils.close(conn);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		}
 		return generate;
+	}
+
+	@Override
+	public PageResultBean queryPage(String countSql, String orderBy, Integer pageNo, Integer PageSize, Object... objects) {
+		PageResultBean pageResultBean = new PageResultBean();
+		if (this.showSql) {
+			if (objects == null || objects.length == 0) {
+				LogDream.info(countSql + orderBy);
+			} else {
+				LogDream.info(countSql + orderBy + "   " + StringUtil.convertObjectsTostring(objects));
+			}
+		}
+		Map<String, Object> map = new HashMap<String, Object>() {
+			private static final long serialVersionUID = 0L;
+			{
+				put("ALLCOUNT", 0);
+				put("PAGELIST", new ArrayList<Map<String, Object>>());
+			}
+		};
+		StringBuilder sBuilder = new StringBuilder("select count(*) as ALLCOUNT from (");
+		sBuilder.append(countSql).append(") a");
+		Map<String, Object> mapTemp = queryMap(sBuilder.toString(), objects);
+		sBuilder.setLength(0);
+		if (this.getDatabaseDefine().getDatabaseType() == 3) {
+			sBuilder.append("select * from (").append(countSql + orderBy).append(")   a limit ").append((pageNo - 1) * PageSize).append(",").append(PageSize);
+			List<Map<String, Object>> lists = queryListMap(sBuilder.toString(), objects);
+			pageResultBean.setList(lists);
+		} else if (this.getDatabaseDefine().getDatabaseType() == 1) {
+			int start = (pageNo - 1) * PageSize + 1;
+			sBuilder.append("SELECT  * FROM    ( SELECT    ROW_NUMBER() OVER ( ").append(orderBy).append("  ) AS rownum , * FROM (").append(countSql)
+					.append(") a ) AS temp WHERE   temp.rownum BETWEEN ").append(start).append(" and ").append(start + PageSize - 1);
+			System.out.println("sqlserver:" + sBuilder);
+			List<Map<String, Object>> lists = queryListMap(sBuilder.toString(), objects);
+			pageResultBean.setList(lists);
+		} else {
+			sBuilder.append("select * from (select *,rownum row_num from (").append(countSql + orderBy).append(")  where rownum<=").append(pageNo * PageSize).append(") where   row_num>=")
+					.append((pageNo - 1) * PageSize);
+			List<Map<String, Object>> lists = queryListMap(sBuilder.toString(), objects);
+			pageResultBean.setList(lists);
+		}
+		pageResultBean.setCount(Integer.valueOf(String.valueOf(mapTemp.get("ALLCOUNT"))));
+		return pageResultBean;
 	}
 
 }
